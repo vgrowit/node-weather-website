@@ -32,8 +32,8 @@ app.use(express.static(parentdirectorypath))
 
 app.get('', (req, res) => {
     res.render('index', {
-        title: 'Weather App', 
-        name: 'Vedantam'
+        title: 'Stock Screener', 
+        name: 'Prasanth Vedantam'
     })
 })
 
@@ -61,24 +61,27 @@ app.get('/help/*', (req, res) => {
     })
 })
 
-app.get('/weather', (req, res) => {
-    if(!req.query.address){
+app.get('/stock', (req, res) => {
+    console.log(req.query.stock)
+    console.log(res.error)
+    if(!req.query.stock){
         return res.send({
             errorMessage: 'address must be provided'
         })
     }
-    geocode(req.query.address, (error, {latitude, longitude, location}) => {
+    geocode(req.query.stock, (error, symbol) => {
         if (error){
             return res.send({error})
         }
-        forecast(longitude, latitude, (error, forecastData) => {
+        forecast(symbol, (error, forecastData) => {
             if (error){
                 return res.send({error})
             }
             res.send({
-                forecast: forecastData.current.weather_descriptions[0],
-                location,
-                address: req.query.address
+                //forecast: forecastData.current.weather_descriptions[0],
+                name: forecastData.Name,
+                description: forecastData.Description,
+                eps: forecastData.EPS
             })
         })
     })

@@ -12,17 +12,23 @@ const weatherForm = document.querySelector('form')
 const search = document.querySelector('input')
 const messageOne = document.querySelector('#mesg-1')
 const messageTwo = document.querySelector('#mesg-2')
+const messageThree = document.querySelector('#mesg-3')
 
 weatherForm.addEventListener('submit', (e)=>{
     e.preventDefault()
-    const location = search.value
+    const Stock = search.value
 
-    fetch('/weather?address='+location).then((response) => {
+    messageOne.textContent = 'Loading...'
+    messageTwo.textContent = ''
+
+    fetch('/stock?stock='+Stock).then((response) => {
         response.json().then((data) => {
             if(data.error){
-                console.log('No address entered')
+                messageOne.textContent = data.error
             }else{
-                console.log(data.location)
+                messageOne.textContent = data.name
+                messageTwo.textContent = data.description
+                messageThree.textContent = data.eps
             }
         })
     })
